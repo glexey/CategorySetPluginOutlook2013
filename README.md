@@ -9,5 +9,4 @@ This Outlook Add-In here is an attempt to replace the stock "Categorize" button 
 
 Currently, the new button doesn't replace the stock one, but appears to the right of the default ribbon. If I figure out how to replace stock one while preserving 'All Categories dialog' entry - I'll do that.
 
-Happy Outlooking,
-Alexei
+Happy Outlooking
