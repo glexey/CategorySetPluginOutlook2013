@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using Microsoft.Office.Interop.Outlook;
 using Microsoft.Office.Tools.Ribbon;
 
@@ -14,7 +12,7 @@ namespace CategorySetPluginOutlook2013 {
         }
 
         private void gallery1_ButtonClick(object sender, RibbonControlEventArgs e) {
-            MessageBox.Show("gallery1_ButtonClick");
+            Globals.ThisAddIn.Application.ActiveExplorer().CommandBars.ExecuteMso("AllCategories");
         }
 
         static String[] separators = new String[] {", ", ","};
@@ -120,7 +118,8 @@ namespace CategorySetPluginOutlook2013 {
                     }
                 }
                 // Draw the categories
-                foreach (Category cat in objNameSpace.Categories) {
+                var sorted_cats = from Category cat in objNameSpace.Categories orderby cat.Name select cat;
+                foreach (Category cat in sorted_cats) {
                     RibbonDropDownItem rdi = Globals.Factory.GetRibbonFactory().CreateRibbonDropDownItem();
                     rdi.Label = cat.Name;
                     Rectangle rect = new Rectangle(0, 0, 20, 20);
