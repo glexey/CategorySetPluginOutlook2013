@@ -5,7 +5,7 @@ One useful feature of Outlook (starting with Outlook 2007 I beleive) is mail "ca
 
 All of this IMHO would work very well and would be adopted widely if MS created a more usable interface for it in Outlook and advertized the feature more. As of today, however, the stock "Categorize" button in Outlook has a limit of showing only 15 MRU categories, making the button practically useless in the case a user has more than 15 active tags (I use ~30 routinely, and the list is growing).
 
-This Outlook Add-In here is an attempt to replace the stock "Categorize" button with a useful one. It is similar in functionality to original control, but displays all available tags at once. I started uing it on day-to-day basis and it really saves time when tagging lots of incoming e-mail.
+This Outlook Add-In here is an attempt to replace the stock "Categorize" button with a useful one. It is similar in functionality to original control, but displays all available tags at once. I use it on day-to-day basis and it really saves time when tagging lots of incoming e-mail.
 
 Currently, the new button doesn't replace the stock one, but appears to the right of the default ribbon. If I figure out how to replace stock one while preserving 'All Categories dialog' entry - I'll do that.
 
