@@ -7,6 +7,6 @@ This Outlook Add-In replaces the stock "Categorize" button with one not limited 
 
 It is similar in functionality to original control, but instead of displaying 15 most recently used ones, it displays all available tags at once.
 
-You can download the Add-In [here](../../releases).
+You can download the Add-In [here](../../releases/latest).
 
 Happy Outlooking
