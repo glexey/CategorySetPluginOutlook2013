@@ -178,6 +178,9 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="AxHostConverter.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -203,12 +206,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Ribbon1.cs">
-      <SubType>Component</SubType>
+    <Compile Include="Ribbon.cs">
+      <XmlRibbon>true</XmlRibbon>
     </Compile>
-    <Compile Include="Ribbon1.Designer.cs">
+    <Compile Include="Ribbon1.cs" />
+    <None Include="Ribbon1.Designer.cs">
       <DependentUpon>Ribbon1.cs</DependentUpon>
-    </Compile>
+    </None>
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -222,6 +226,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Ribbon.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

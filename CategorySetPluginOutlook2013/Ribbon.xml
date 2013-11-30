@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<customUI onLoad="Ribbon_Load" xmlns="http://schemas.microsoft.com/office/2006/01/customui">
+  <ribbon>
+    <tabs>
+      <tab idMso="TabMail">
+        <group id="group1" label="myPlugins">
+          <gallery id="SetCategory" imageMso="ColorMenu"
+                   supertip="Assign message(s) to a category(ies)" label="Categorize" size="large"
+                   getItemCount="catGallery_getItemCount"
+                   getItemImage="catGallery_getItemImage"
+                   getItemLabel="catGallery_getItemLabel"
+                   onAction="catGallery_clicked"
+                   >
+            <!--getItemID="catGallery_getItemID"-->
+            <button id="button1" label="&amp;All Categories..." showImage="false" />
+          </gallery>
+        </group>
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>
