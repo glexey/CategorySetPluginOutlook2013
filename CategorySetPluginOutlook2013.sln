@@ -8,6 +8,12 @@ Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "CategorySetPluginSetup", "C
 		{75C39DB6-78D0-4527-AFB4-C8656C6B9638} = {75C39DB6-78D0-4527-AFB4-C8656C6B9638}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5180F02E-1EAF-417B-B34C-750165D4B6A4}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
