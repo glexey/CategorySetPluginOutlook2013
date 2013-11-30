@@ -1,7 +1,7 @@
 CategorySetPluginOutlook2013
 ============================
 
-This Outlook Add-In replaces the stock "Categorize" button with one not limited to 15 most recently used categories:
+This Outlook 2013 Add-In replaces the stock "Categorize" button with one not limited to 15 most recently used categories:
 
 ![Add-In screenshot](screenshot.png)
 
