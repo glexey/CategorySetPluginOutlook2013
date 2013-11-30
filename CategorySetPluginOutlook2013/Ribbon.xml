@@ -3,7 +3,12 @@
   <ribbon>
     <tabs>
       <tab idMso="TabMail">
-        <group id="group1" label="myPlugins">
+        <!-- Hide stock "Tags" group -->
+        <group idMso="GroupMailOptions" visible="false" />
+        <!-- And create a similar group, just with our new "Categorize" button instead of the original one -->
+        <group id="MyGroupMailOptions" insertAfterMso="GroupMailOptions" label="Tags">
+          <menu idMso="PolicyTagsMenu" size="large" />
+          <button idMso="ToggleMarkAsRead" size="large"/>
           <gallery id="SetCategory" imageMso="ColorMenu"
                    supertip="Assign message(s) to a category(ies)" label="Categorize" size="large"
                    getItemCount="catGallery_getItemCount"
@@ -11,9 +16,10 @@
                    getItemLabel="catGallery_getItemLabel"
                    onAction="catGallery_clicked"
                    >
-            <!--getItemID="catGallery_getItemID"-->
-            <button id="button1" label="&amp;All Categories..." showImage="false" />
+            <button idMso="AllCategories" />
+            <button idMso="SetCategoryQuickClick" />
           </gallery>
+          <menu idMso="FollowUpMenu" size="large" />
         </group>
       </tab>
     </tabs>
