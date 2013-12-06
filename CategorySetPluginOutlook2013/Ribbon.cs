@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -38,6 +39,8 @@ namespace CategorySetPluginOutlook2013 {
             else if (item is RemoteItem) ret = (item as RemoteItem).Categories;
             else if (item is DocumentItem) ret = (item as DocumentItem).Categories;
             else if (item is PostItem) ret = (item as PostItem).Categories;
+            else if (item is NoteItem) ret = (item as NoteItem).Categories;
+            else if (item is JournalItem) ret = (item as JournalItem).Categories;
             else if (item is SharingItem) ret = (item as SharingItem).Categories;
             else if (item is ContactItem) ret = (item as ContactItem).Categories;
             else if (item is DistListItem) ret = (item as DistListItem).Categories;
@@ -45,8 +48,12 @@ namespace CategorySetPluginOutlook2013 {
             else if (item is TaskRequestDeclineItem) ret = (item as TaskRequestDeclineItem).Categories;
             else if (item is TaskRequestUpdateItem) ret = (item as TaskRequestUpdateItem).Categories;
             else if (item is ReportItem) ret = (item as ReportItem).Categories;
-            // complete list at http://msdn.microsoft.com/en-us/library/office/ff861539.aspx
-            else return null; // Unsupported object type
+            // ^^^ the list comes from http://msdn.microsoft.com/en-us/library/office/ff861539.aspx
+            else if (item is ConversationHeader) {
+                Conversation conv = (item as ConversationHeader).GetConversation();
+                ret = conv.GetAlwaysAssignCategories(ex.CurrentFolder.Store);
+            }
+            else { Debug.WriteLine("unsupported item type " + item); return null; } // Unsupported object type
             if (ret == null) ret = ""; // Supported type, but Categories list is empty
             return ret;
         }
@@ -60,6 +67,8 @@ namespace CategorySetPluginOutlook2013 {
             else if (item is RemoteItem) { (item as RemoteItem).Categories = value; (item as RemoteItem).Save(); }
             else if (item is DocumentItem) { (item as DocumentItem).Categories = value; (item as DocumentItem).Save(); }
             else if (item is PostItem) { (item as PostItem).Categories = value; (item as PostItem).Save(); }
+            else if (item is NoteItem) { (item as NoteItem).Categories = value; (item as NoteItem).Save(); }
+            else if (item is JournalItem) { (item as JournalItem).Categories = value; (item as JournalItem).Save(); }
             else if (item is SharingItem) { (item as SharingItem).Categories = value; (item as SharingItem).Save(); }
             else if (item is ContactItem) { (item as ContactItem).Categories = value; (item as ContactItem).Save(); }
             else if (item is DistListItem) { (item as DistListItem).Categories = value; (item as DistListItem).Save(); }
@@ -67,6 +76,11 @@ namespace CategorySetPluginOutlook2013 {
             else if (item is TaskRequestDeclineItem) { (item as TaskRequestDeclineItem).Categories = value; (item as TaskRequestDeclineItem).Save(); }
             else if (item is TaskRequestUpdateItem) { (item as TaskRequestUpdateItem).Categories = value; (item as TaskRequestUpdateItem).Save(); }
             else if (item is ReportItem) { (item as ReportItem).Categories = value; (item as ReportItem).Save(); }
+            else if (item is ConversationHeader) {
+                Conversation conv = (item as ConversationHeader).GetConversation();
+                if (value != "")
+                    conv.SetAlwaysAssignCategories(value, ex.CurrentFolder.Store);
+            }
         }
 
         private bool hasCat(Object item, String targetCat) {
@@ -78,6 +92,8 @@ namespace CategorySetPluginOutlook2013 {
         private void removeCat(Object item, String targetCat) {
             String str = getCat(item);
             if (str == null) return; // Unsupported outlook item type
+            if (item is ConversationHeader)
+                (item as ConversationHeader).GetConversation().ClearAlwaysAssignCategories(ex.CurrentFolder.Store);
             setCat(item, String.Join(",", cSplit(str).Where(s => s != targetCat).ToList()));
         }
 
@@ -106,27 +122,45 @@ namespace CategorySetPluginOutlook2013 {
         HashSet<String> catsAllHave;  // Categories that all messages have
         HashSet<String> catsSomeHave; // Categories that some messages have
         IEnumerable<Category> sorted_cats; // Categories sorted [alphabetically]
+        Explorer ex;
 
         private NameSpace objNameSpace = null;
 
         // [Hack] Assumption :: getItemCount() always gets called before other get* callbacks
         public int catGallery_getItemCount(Office.IRibbonControl control) {
 
+            //Debug.WriteLine("catGallery_getItemCount(Office.IRibbonControl control)");
             if (objNameSpace == null)
                 objNameSpace = Globals.ThisAddIn.Application.GetNamespace("MAPI");
 
             // Check the categories which are already set on the selected items
-            Explorer ex = Globals.ThisAddIn.Application.ActiveExplorer();
+            ex = Globals.ThisAddIn.Application.ActiveExplorer();
             catsAllHave = new HashSet<String>();
             catsSomeHave = new HashSet<String>();
             if (ex != null) {
                 int itemnum = 0;
-                foreach (Object item in ex.Selection) {
-                    String[] cats = cSplit(getCat(item));
-                    foreach (String cat in cats) catsSomeHave.Add(cat);
-                    if (itemnum++ == 0)
-                        foreach (String cat in cats) catsAllHave.Add(cat);
-                    catsAllHave.RemoveWhere(cat => !cats.Contains<String>(cat));
+                Selection convHeaders = ex.Selection.GetSelection(OlSelectionContents.olConversationHeaders) as Selection;
+                if (convHeaders.Count > 0) {
+                    Debug.WriteLine("getcount: convHeaders.Count > 0");
+                    // If a conversation header is selected, we'll examine/set "always set" categories on a conversation
+                    foreach (ConversationHeader item in convHeaders) {
+                        String[] cats = cSplit(getCat(item));
+                        foreach (String cat in cats) catsSomeHave.Add(cat);
+                        if (itemnum++ == 0)
+                            foreach (String cat in cats) catsAllHave.Add(cat);
+                        catsAllHave.RemoveWhere(cat => !cats.Contains<String>(cat));
+                    }
+                }
+                else {
+                    Debug.WriteLine("getcount: convHeaders.Count > 0");
+                    // If conversation header is not selected, we'll examine/set categories on individual items
+                    foreach (Object item in ex.Selection) {
+                        String[] cats = cSplit(getCat(item));
+                        foreach (String cat in cats) catsSomeHave.Add(cat);
+                        if (itemnum++ == 0)
+                            foreach (String cat in cats) catsAllHave.Add(cat);
+                        catsAllHave.RemoveWhere(cat => !cats.Contains<String>(cat));
+                    }
                 }
             }
 
@@ -135,10 +169,6 @@ namespace CategorySetPluginOutlook2013 {
 
             return objNameSpace.Categories.Count;
         }
-
-        /*public string catGallery_getItemID(Office.IRibbonControl control, int index) {
-            return sorted_cats.ElementAt(index).Name;
-        }*/
 
         public string catGallery_getItemLabel(Office.IRibbonControl control, int index) {
             return sorted_cats.ElementAt(index).Name;
@@ -177,13 +207,13 @@ namespace CategorySetPluginOutlook2013 {
         }
         
         public void catGallery_clicked(Office.IRibbonControl control, string selectedId, int selectedIndex) {
-            //MessageBox.Show("catGallery_clicked: " + control +
-            //    "\nSelectedId: " + selectedId +
-            //    "\nSelectedIndex:" + selectedIndex);
             String targetCategory = sorted_cats.ElementAt(selectedIndex).Name;
-            Explorer ex = Globals.ThisAddIn.Application.ActiveExplorer();
+            ex = Globals.ThisAddIn.Application.ActiveExplorer();
             if (ex != null) {
-                var items = ex.Selection.Cast<Object>();
+                Selection convHeaders = ex.Selection.GetSelection(OlSelectionContents.olConversationHeaders) as Selection;
+                IEnumerable<Object> items = (convHeaders.Count > 0) ?
+                    convHeaders.Cast<ConversationHeader>() : ex.Selection.Cast<Object>();
+
                 if (items.All(item => hasCat(item, targetCategory)))
                     // If all items already contain the category, then remove it
                     items.AsParallel().ForAll(item => removeCat(item, targetCategory));
