@@ -9,7 +9,7 @@
         <group id="MyGroupMailOptions" insertAfterMso="GroupMailOptions" label="Tags" autoScale="true">
           <menu idMso="PolicyTagsMenu" size="large" />
           <button idMso="ToggleMarkAsRead" size="large" />
-          <gallery id="SetCategory" imageMso="ColorMenu"
+          <gallery id="SetCategory" imageMso="ColorMenu" invalidateContentOnDrop="true"
                    supertip="Assign message(s) to a category(ies)" label="Categorize" size="large"
                    getItemCount="catGallery_getItemCount"
                    getItemImage="catGallery_getItemImage"
@@ -19,6 +19,45 @@
             <button idMso="SetCategoryQuickClick" />
           </gallery>
           <menu idMso="FollowUpMenu" size="large" />
+        </group>
+      </tab>
+      <tab idMso="TabReadMessage">
+        <!-- Hide stock "Tags" group -->
+        <group idMso="GroupMessageOptions" visible="false" />
+        <!-- And create a similar group, just with our new "Categorize" button instead of the original one -->
+        <group id="MyGroupMessageOptions" insertAfterMso="GroupMessageOptions" label="Tags" autoScale="true">
+          <menu idMso="PolicyTagsMenu" size="large" />
+          <toggleButton idMso="ToggleMarkAsUnread" size="large" />
+          <gallery id="SetCategoryReadMessage" imageMso="ColorMenu" invalidateContentOnDrop="true"
+                   supertip="Assign message(s) to a category(ies)" label="Categorize" size="large"
+                   getItemCount="catGallery_getItemCount"
+                   getItemImage="catGallery_getItemImage"
+                   getItemLabel="catGallery_getItemLabel"
+                   onAction="catGallery_clicked" >
+            <button idMso="AllCategories" />
+            <button idMso="SetCategoryQuickClick" />
+          </gallery>
+          <menu idMso="FollowUpReadMenu" size="large" />
+        </group>
+      </tab>
+      <tab idMso="TabNewMailMessage">
+        <!-- Hide stock "Tags" group -->
+        <group idMso="GroupMessageOptions" visible="false" />
+        <!-- And create a similar group, just with our new "Categorize" button instead of the original one -->
+        <group id="MyGroupNewMessageOptions" insertAfterMso="GroupMessageOptions" label="Tags" autoScale="true">
+          <menu idMso="PolicyTagsMenu" size="large" />
+          <gallery id="SetCategoryNewMessage" imageMso="ColorMenu" invalidateContentOnDrop="true"
+                   supertip="Assign message(s) to a category(ies)" label="Categorize" size="large"
+                   getItemCount="catGallery_getItemCount"
+                   getItemImage="catGallery_getItemImage"
+                   getItemLabel="catGallery_getItemLabel"
+                   onAction="catGallery_clicked" >
+            <button idMso="AllCategories" />
+            <button idMso="SetCategoryQuickClick" />
+          </gallery>
+          <menu idMso="FollowUpComposeMenu" />
+          <toggleButton idMso="HighImportance" />
+          <toggleButton idMso="LowImportance" />
         </group>
       </tab>
     </tabs>

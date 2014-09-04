@@ -129,39 +129,47 @@ namespace CategorySetPluginOutlook2013 {
         // [Hack] Assumption :: getItemCount() always gets called before other get* callbacks
         public int catGallery_getItemCount(Office.IRibbonControl control) {
 
-            //Debug.WriteLine("catGallery_getItemCount(Office.IRibbonControl control)");
             if (objNameSpace == null)
                 objNameSpace = Globals.ThisAddIn.Application.GetNamespace("MAPI");
 
             // Check the categories which are already set on the selected items
-            ex = Globals.ThisAddIn.Application.ActiveExplorer();
             catsAllHave = new HashSet<String>();
             catsSomeHave = new HashSet<String>();
-            if (ex != null) {
-                int itemnum = 0;
-                Selection convHeaders = ex.Selection.GetSelection(OlSelectionContents.olConversationHeaders) as Selection;
-                if (convHeaders.Count > 0) {
-                    Debug.WriteLine("getcount: convHeaders.Count > 0");
-                    // If a conversation header is selected, we'll examine/set "always set" categories on a conversation
-                    foreach (ConversationHeader item in convHeaders) {
-                        String[] cats = cSplit(getCat(item));
-                        foreach (String cat in cats) catsSomeHave.Add(cat);
-                        if (itemnum++ == 0)
-                            foreach (String cat in cats) catsAllHave.Add(cat);
-                        catsAllHave.RemoveWhere(cat => !cats.Contains<String>(cat));
+            if (control.Id == "SetCategory") {
+                // Explorer window
+                Debug.WriteLine("Explorer");
+                ex = Globals.ThisAddIn.Application.ActiveExplorer();
+                if (ex != null) {
+                    int itemnum = 0;
+                    Selection convHeaders = ex.Selection.GetSelection(OlSelectionContents.olConversationHeaders) as Selection;
+                    if (convHeaders.Count > 0) {
+                        // If a conversation header is selected, we'll examine/set "always set" categories on a conversation
+                        foreach (ConversationHeader item in convHeaders) {
+                            String[] cats = cSplit(getCat(item));
+                            foreach (String cat in cats) catsSomeHave.Add(cat);
+                            if (itemnum++ == 0)
+                                foreach (String cat in cats) catsAllHave.Add(cat);
+                            catsAllHave.RemoveWhere(cat => !cats.Contains<String>(cat));
+                        }
+                    }
+                    else {
+                        // If conversation header is not selected, we'll examine/set categories on individual items
+                        foreach (Object item in ex.Selection) {
+                            String[] cats = cSplit(getCat(item));
+                            foreach (String cat in cats) catsSomeHave.Add(cat);
+                            if (itemnum++ == 0)
+                                foreach (String cat in cats) catsAllHave.Add(cat);
+                            catsAllHave.RemoveWhere(cat => !cats.Contains<String>(cat));
+                        }
                     }
                 }
-                else {
-                    Debug.WriteLine("getcount: convHeaders.Count > 0");
-                    // If conversation header is not selected, we'll examine/set categories on individual items
-                    foreach (Object item in ex.Selection) {
-                        String[] cats = cSplit(getCat(item));
-                        foreach (String cat in cats) catsSomeHave.Add(cat);
-                        if (itemnum++ == 0)
-                            foreach (String cat in cats) catsAllHave.Add(cat);
-                        catsAllHave.RemoveWhere(cat => !cats.Contains<String>(cat));
-                    }
-                }
+            }
+            else {
+                // Inspector window
+                Debug.WriteLine(control.Id);
+                Inspector ix = Globals.ThisAddIn.Application.ActiveInspector();
+                String[] cats = cSplit(getCat( ix.CurrentItem ));
+                foreach (String cat in cats) catsAllHave.Add(cat);
             }
 
             // Sort the categories and save for later access by get* methods
@@ -175,11 +183,6 @@ namespace CategorySetPluginOutlook2013 {
         }
 
         public stdole.IPictureDisp catGallery_getItemImage(Office.IRibbonControl control, int index) {
-            // On our last get* call I invalidate the control, so that next time it's invoked
-            // our get* methods would be called all over again. We need this since any selection change 
-            // invalidates the category images
-            if (index == sorted_cats.Count() - 1 )
-                this.ribbon.InvalidateControl("SetCategory");
 
             Category cat = sorted_cats.ElementAt(index);
             Rectangle rect = new Rectangle(0, 0, 20, 20);
@@ -208,12 +211,21 @@ namespace CategorySetPluginOutlook2013 {
         
         public void catGallery_clicked(Office.IRibbonControl control, string selectedId, int selectedIndex) {
             String targetCategory = sorted_cats.ElementAt(selectedIndex).Name;
-            ex = Globals.ThisAddIn.Application.ActiveExplorer();
-            if (ex != null) {
-                Selection convHeaders = ex.Selection.GetSelection(OlSelectionContents.olConversationHeaders) as Selection;
-                IEnumerable<Object> items = (convHeaders.Count > 0) ?
-                    convHeaders.Cast<ConversationHeader>() : ex.Selection.Cast<Object>();
-
+            IEnumerable<Object> items = null;
+            if (control.Id == "SetCategory") {
+                // Explorer window
+                ex = Globals.ThisAddIn.Application.ActiveExplorer();
+                if (ex != null) {
+                    Selection convHeaders = ex.Selection.GetSelection(OlSelectionContents.olConversationHeaders) as Selection;
+                    items = (convHeaders.Count > 0) ? convHeaders.Cast<ConversationHeader>() : ex.Selection.Cast<Object>();
+                }
+            }
+            else { 
+                // Inspector Window
+                Inspector ix = Globals.ThisAddIn.Application.ActiveInspector();
+                items = new object[] { ix.CurrentItem };
+            }
+            if (items != null) {
                 if (items.All(item => hasCat(item, targetCategory)))
                     // If all items already contain the category, then remove it
                     items.AsParallel().ForAll(item => removeCat(item, targetCategory));
