@@ -58,6 +58,135 @@
           <menu idMso="FollowUpComposeMenu" />
           <toggleButton idMso="HighImportance" />
           <toggleButton idMso="LowImportance" />
+          <button idMso="MessageOptions" />
+        </group>
+      </tab>
+      <tab idMso="TabTask">
+        <!-- Hide stock "Tags" group -->
+        <group idMso="GroupTaskOptions" visible="false" />
+        <!-- And create a similar group, just with our new "Categorize" button instead of the original one -->
+        <group id="MyGroupTaskOptions" insertAfterMso="GroupTaskOptions" label="Tags" autoScale="true">
+          <menu idMso="PolicyTagsMenu" size="large" />
+          <gallery id="SetCategoryTask" imageMso="ColorMenu" invalidateContentOnDrop="true"
+                   supertip="Assign message(s) to a category(ies)" label="Categorize" size="large"
+                   getItemCount="catGallery_getItemCount"
+                   getItemImage="catGallery_getItemImage"
+                   getItemLabel="catGallery_getItemLabel"
+                   onAction="catGallery_clicked" >
+            <button idMso="AllCategories" />
+            <button idMso="SetCategoryQuickClick" />
+          </gallery>
+          <toggleButton idMso="Private" />
+          <toggleButton idMso="HighImportance" />
+          <toggleButton idMso="LowImportance" />
+        </group>
+      </tab>
+      <tab idMso="TabAppointment">
+        <!-- Hide stock "Tags" group -->
+        <group idMso="GroupAppointmentOptions" visible="false" />
+        <!-- And create a similar group, just with our new "Categorize" button instead of the original one -->
+        <group id="MyGroupAppointmentOptions" insertAfterMso="GroupAppointmentOptions" label="Tags" autoScale="true">
+          <gallery id="SetCategoryAppt" imageMso="ColorMenu" invalidateContentOnDrop="true"
+                   supertip="Assign message(s) to a category(ies)" label="Categorize" size="large"
+                   getItemCount="catGallery_getItemCount"
+                   getItemImage="catGallery_getItemImage"
+                   getItemLabel="catGallery_getItemLabel"
+                   onAction="catGallery_clicked" >
+            <button idMso="AllCategories" />
+            <button idMso="SetCategoryQuickClick" />
+          </gallery>
+          <toggleButton idMso="Private" />
+          <toggleButton idMso="HighImportance" />
+          <toggleButton idMso="LowImportance" />
+        </group>
+      </tab>
+      <tab idMso="TabDistributionList">
+        <!-- Hide stock "Tags" group -->
+        <group idMso="GroupContactOptions" visible="false" />
+        <!-- And create a similar group, just with our new "Categorize" button instead of the original one -->
+        <group id="MyGroupContactOptions" insertAfterMso="GroupContactOptions" label="Tags" autoScale="true">
+          <gallery id="SetCategoryGroupContact" imageMso="ColorMenu" invalidateContentOnDrop="true"
+                   supertip="Assign message(s) to a category(ies)" label="Categorize" size="large"
+                   getItemCount="catGallery_getItemCount"
+                   getItemImage="catGallery_getItemImage"
+                   getItemLabel="catGallery_getItemLabel"
+                   onAction="catGallery_clicked" >
+            <button idMso="AllCategories" />
+            <button idMso="SetCategoryQuickClick" />
+          </gallery>
+          <menu idMso="FollowUpReadMenu" size="large" />
+          <toggleButton idMso="Private" size="large" />
+        </group>
+      </tab>
+      <tab idMso="TabContact">
+        <!-- Hide stock "Tags" group -->
+        <group idMso="GroupContactOptions" visible="false" />
+        <!-- And create a similar group, just with our new "Categorize" button instead of the original one -->
+        <group id="MyGroupContactOptions2" insertAfterMso="GroupContactOptions" label="Tags" autoScale="true">
+          <gallery id="SetCategoryGroupContact2" imageMso="ColorMenu" invalidateContentOnDrop="true"
+                   supertip="Assign message(s) to a category(ies)" label="Categorize" size="large"
+                   getItemCount="catGallery_getItemCount"
+                   getItemImage="catGallery_getItemImage"
+                   getItemLabel="catGallery_getItemLabel"
+                   onAction="catGallery_clicked" >
+            <button idMso="AllCategories" />
+            <button idMso="SetCategoryQuickClick" />
+          </gallery>
+          <menu idMso="FollowUpReadMenu" size="large" />
+          <toggleButton idMso="Private" size="large" />
+        </group>
+      </tab>
+      <tab idMso="TabJournal">
+        <!-- Hide stock "Tags" group -->
+        <group idMso="GroupMessageOptions" visible="false" />
+        <!-- And create a similar group, just with our new "Categorize" button instead of the original one -->
+        <group id="MyGroupMessageOptions2" insertAfterMso="GroupMessageOptions" label="Tags" autoScale="true">
+          <gallery id="SetCategoryGroupMessage2" imageMso="ColorMenu" invalidateContentOnDrop="true"
+                   supertip="Assign message(s) to a category(ies)" label="Categorize" size="large"
+                   getItemCount="catGallery_getItemCount"
+                   getItemImage="catGallery_getItemImage"
+                   getItemLabel="catGallery_getItemLabel"
+                   onAction="catGallery_clicked" >
+            <button idMso="AllCategories" />
+            <button idMso="SetCategoryQuickClick" />
+          </gallery>
+          <toggleButton idMso="Private" size="large" />
+        </group>
+      </tab>
+      <tab idMso="TabOmsMeultimediaMessage">
+        <!-- Hide stock "Tags" group -->
+        <group idMso="GroupMessageOptions" visible="false" />
+        <!-- And create a similar group, just with our new "Categorize" button instead of the original one -->
+        <group id="MyGroupMessageOptions3" insertAfterMso="GroupMessageOptions" label="Tags" autoScale="true">
+          <toggleButton idMso="ToggleMarkAsUnread" size="large" />
+          <gallery id="SetCategoryGroupMessage3" imageMso="ColorMenu" invalidateContentOnDrop="true"
+                   supertip="Assign message(s) to a category(ies)" label="Categorize" size="large"
+                   getItemCount="catGallery_getItemCount"
+                   getItemImage="catGallery_getItemImage"
+                   getItemLabel="catGallery_getItemLabel"
+                   onAction="catGallery_clicked" >
+            <button idMso="AllCategories" />
+            <button idMso="SetCategoryQuickClick" />
+          </gallery>
+          <menu idMso="FollowUpReadMenu" size="large" />
+        </group>
+      </tab>
+      <tab idMso="TabOmsTextMessage">
+        <!-- Hide stock "Tags" group -->
+        <group idMso="GroupMessageOptions" visible="false" />
+        <!-- And create a similar group, just with our new "Categorize" button instead of the original one -->
+        <group id="MyGroupMessageOptions4" insertAfterMso="GroupMessageOptions" label="Tags" autoScale="true">
+          <toggleButton idMso="ToggleMarkAsUnread" size="large" />
+          <gallery id="SetCategoryGroupMessage4" imageMso="ColorMenu" invalidateContentOnDrop="true"
+                   supertip="Assign message(s) to a category(ies)" label="Categorize" size="large"
+                   getItemCount="catGallery_getItemCount"
+                   getItemImage="catGallery_getItemImage"
+                   getItemLabel="catGallery_getItemLabel"
+                   onAction="catGallery_clicked" >
+            <button idMso="AllCategories" />
+            <button idMso="SetCategoryQuickClick" />
+          </gallery>
+          <menu idMso="FollowUpReadMenu" size="large" />
         </group>
       </tab>
     </tabs>

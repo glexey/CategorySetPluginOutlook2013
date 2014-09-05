@@ -137,7 +137,6 @@ namespace CategorySetPluginOutlook2013 {
             catsSomeHave = new HashSet<String>();
             if (control.Id == "SetCategory") {
                 // Explorer window
-                Debug.WriteLine("Explorer");
                 ex = Globals.ThisAddIn.Application.ActiveExplorer();
                 if (ex != null) {
                     int itemnum = 0;
@@ -166,7 +165,6 @@ namespace CategorySetPluginOutlook2013 {
             }
             else {
                 // Inspector window
-                Debug.WriteLine(control.Id);
                 Inspector ix = Globals.ThisAddIn.Application.ActiveInspector();
                 String[] cats = cSplit(getCat( ix.CurrentItem ));
                 foreach (String cat in cats) catsAllHave.Add(cat);
